@@ -60,9 +60,9 @@ void ARunnerCharacter::BindInputs(UInputComponent* PlayerInputComponent)
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("BindInputs()"));
 	if (UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ARunnerCharacter::InputJump);
-		Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ARunnerCharacter::InputMove);
-		Input->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ARunnerCharacter::InputAttack);
+		Input->BindAction(JumpAction, ETriggerEvent::Started, this, &ARunnerCharacter::InputJump);
+		Input->BindAction(MoveAction, ETriggerEvent::Started, this, &ARunnerCharacter::InputMove);
+		Input->BindAction(AttackAction, ETriggerEvent::Started, this, &ARunnerCharacter::InputAttack);
 	}
 }
 
