@@ -72,6 +72,8 @@ void ARunnerCharacter::InputJump(const FInputActionInstance& Instance)
 	{
 		GEngine->AddOnScreenDebugMessage(321, 5.0f, FColor::Magenta, TEXT("InputJump()"));
 	}
+
+	Super::Jump();
 }
 
 void ARunnerCharacter::InputMove(const FInputActionInstance& Instance)
@@ -80,6 +82,9 @@ void ARunnerCharacter::InputMove(const FInputActionInstance& Instance)
 	{
 		GEngine->AddOnScreenDebugMessage(4321, 5.0f, FColor::Magenta, TEXT("InputMove()"));
 	}
+
+	bool bMovingLeft = Instance.GetValue().Get<float>() < 0.0f;
+	LaneIndex += bMovingLeft ? -1 : 1;
 }
 
 void ARunnerCharacter::InputAttack(const FInputActionInstance& Instance)

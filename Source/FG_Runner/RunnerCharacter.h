@@ -29,6 +29,10 @@ class FG_RUNNER_API ARunnerCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess))
 	TObjectPtr<UInputAction> AttackAction;
+
+protected:
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite)
+	int LaneIndex;
 	
 public:
 	// Sets default values for this character's properties
