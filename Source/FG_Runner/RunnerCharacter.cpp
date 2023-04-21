@@ -4,13 +4,14 @@
 #include "RunnerCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values
 ARunnerCharacter::ARunnerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 }
 
 // Called when the game starts or when spawned
@@ -23,6 +24,8 @@ void ARunnerCharacter::BeginPlay()
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("BeginPlay()"));
 	}
 
+	PlayerCamera->AddWorldTransform(GetActorTransform());
+	
 	auto PlayerController = Cast<APlayerController>(Controller);
 
 	if (ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer())

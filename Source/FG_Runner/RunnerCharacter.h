@@ -8,10 +8,15 @@
 #include "GameFramework/Character.h"
 #include "RunnerCharacter.generated.h"
 
+class UCameraComponent;
+
 UCLASS()
 class FG_RUNNER_API ARunnerCharacter : public ACharacter
 {
 	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess))
+	TObjectPtr<UCameraComponent> PlayerCamera;
 	
 	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess))
 	TSoftObjectPtr<UInputMappingContext> InputMapping;
