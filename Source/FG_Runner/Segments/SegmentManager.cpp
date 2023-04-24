@@ -29,7 +29,7 @@ void ASegmentManager::BeginPlay()
 	}
 	else
 	{
-		int RandomIndex = FMath::Rand() % SegmentBlueprints.Max();
+		int RandomIndex = FMath::Rand() % SegmentBlueprints.Num();
 		InitSegment = SegmentBlueprints[RandomIndex];
 		if (!InitSegment)
 		{
@@ -63,22 +63,22 @@ void ASegmentManager::MoveSegments(float DeltaTime)
 	SegmentSpeed = SegmentSpeed >= SegmentMaxSpeed ? SegmentMaxSpeed : SegmentSpeed + SegmentAcceleration * DeltaTime;
 	for (int i = 0; i < SegmentBufferSize; i++)
 	{
-		const int BufferIndex = (SegmentCurrentIndex + i) % GroundSegments.Max();
+		const int BufferIndex = (SegmentCurrentIndex + i) % GroundSegments.Num();
 		GroundSegments[BufferIndex]->Move(SegmentSpeed * DeltaTime * 100.0f);
 	}
 }
 
 void ASegmentManager::AddSegments()
 {
-	int LastIndex = (SegmentCurrentIndex + SegmentBufferSize - 1) % GroundSegments.Max();
+	int LastIndex = (SegmentCurrentIndex + SegmentBufferSize - 1) % GroundSegments.Num();
 	auto LastSegment = GroundSegments[LastIndex];
 	FVector LastExit = LastSegment->GetExitPosition();
-	while (SegmentBufferSize < GroundSegments.Max() && LastExit.X < PrewarmDistance)
+	while (SegmentBufferSize < GroundSegments.Num() && LastExit.X < PrewarmDistance)
 	{
-		const int RandomIndex = FMath::Rand() % SegmentBlueprints.Max();
+		const int RandomIndex = FMath::Rand() % SegmentBlueprints.Num();
 		const auto NewSegment = GetWorld()->SpawnActor<AGroundSegment>(SegmentBlueprints[RandomIndex], FVector(10000.0f, 0.0f, 0.0f), FRotator::ZeroRotator);
 		NewSegment->SetEntryPosition(LastExit);
-		LastIndex = (LastIndex + 1) % GroundSegments.Max();
+		LastIndex = (LastIndex + 1) % GroundSegments.Num();
 		GroundSegments[LastIndex] = NewSegment;
 		LastSegment = NewSegment;
 		LastExit = NewSegment->GetExitPosition();
@@ -95,11 +95,11 @@ void ASegmentManager::DeleteSegments()
 	while (SegmentBufferSize >= 0 && FirstExit.X < -1000.0f)
 	{
 		FirstSegment->Destroy();
-		FirstIndex = ++FirstIndex % GroundSegments.Max();
+		FirstIndex = ++FirstIndex % GroundSegments.Num();
 		FirstSegment = GroundSegments[FirstIndex];
 		FirstExit = FirstSegment->GetExitPosition();
 
-		SegmentCurrentIndex = (SegmentCurrentIndex + 1) % GroundSegments.Max();
+		SegmentCurrentIndex = (SegmentCurrentIndex + 1) % GroundSegments.Num();
 		SegmentBufferSize--;
 	}
 }
