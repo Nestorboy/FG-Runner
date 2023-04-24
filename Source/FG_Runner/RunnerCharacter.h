@@ -31,8 +31,11 @@ class FG_RUNNER_API ARunnerCharacter : public ACharacter
 	TObjectPtr<UInputAction> AttackAction;
 
 protected:
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	int MaxHealth = 3;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	float LaneSpacing = 150.0f;
 	
 	UPROPERTY(EditAnywhere, Category = Debug, meta = (AllowPrivateAccess), Transient)
 	int RemainingHealth;
@@ -68,10 +71,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	virtual void BindInputs(UInputComponent* PlayerInputComponent);
-	
 	virtual void InputJump(const FInputActionInstance& Instance);
 	virtual void InputMove(const FInputActionInstance& Instance);
 	virtual void InputAttack(const FInputActionInstance& Instance);
@@ -79,4 +80,6 @@ public:
 	virtual void OnStartMove();
 	virtual void OnMove(float DeltaTime);
 	virtual void OnEndMove();
+
+	virtual void Damage(int Value);
 };

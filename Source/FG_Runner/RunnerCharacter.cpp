@@ -26,14 +26,14 @@ void ARunnerCharacter::BeginPlay()
 	
 	PlayerCamera->AddWorldTransform(GetActorTransform());
 
-	float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
+	const float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
 	const FVector OldLocation = GetActorLocation();
-	const FVector NewLocation = FVector(OldLocation.X, (static_cast<float>(LaneIndex) - CenterLaneOffset) * 100.0f, OldLocation.Z);
+	const FVector NewLocation = FVector(OldLocation.X, (static_cast<float>(LaneIndex) - CenterLaneOffset) * LaneSpacing, OldLocation.Z);
 	SetActorLocation(NewLocation);
-	
-	auto PlayerController = Cast<APlayerController>(Controller);
 
-	if (ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer())
+	const auto PlayerController = Cast<APlayerController>(Controller);
+
+	if (const ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer())
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
@@ -95,7 +95,7 @@ void ARunnerCharacter::InputMove(const FInputActionInstance& Instance)
 		return;
 	}
 
-	bool bMovingLeft = Instance.GetValue().Get<float>() < 0.0f;
+	const bool bMovingLeft = Instance.GetValue().Get<float>() < 0.0f;
 	if (bMovingLeft)
 	{
 		if (LaneIndex <= 0)
@@ -131,7 +131,7 @@ void ARunnerCharacter::OnMove(float DeltaTime)
 
 	float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
 	const FVector OldLocation = GetActorLocation();
-	const FVector NewLocation = FVector(OldLocation.X, (FMath::Lerp(static_cast<float>(OldLaneIndex), static_cast<float>(LaneIndex), 1.0f - MoveTime / MoveDuration) - CenterLaneOffset) * 100.0f, OldLocation.Z);
+	const FVector NewLocation = FVector(OldLocation.X, (FMath::Lerp(static_cast<float>(OldLaneIndex), static_cast<float>(LaneIndex), 1.0f - MoveTime / MoveDuration) - CenterLaneOffset) * LaneSpacing, OldLocation.Z);
 	SetActorLocation(NewLocation);
 	
 	MoveTime -= DeltaTime;
@@ -141,12 +141,21 @@ void ARunnerCharacter::OnEndMove()
 {
 	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("OnEndMove()"));
 
-	float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
+	const float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
 	const FVector OldLocation = GetActorLocation();
-	const FVector NewLocation = FVector(OldLocation.X, (static_cast<float>(LaneIndex) - CenterLaneOffset) * 100.0f, OldLocation.Z);
+	const FVector NewLocation = FVector(OldLocation.X, (static_cast<float>(LaneIndex) - CenterLaneOffset) * LaneSpacing, OldLocation.Z);
 	SetActorLocation(NewLocation);
 	
 	bIsMoving = false;
+}
+
+void ARunnerCharacter::Damage(int Value)
+{
+	RemainingHealth -= Value;
+	if (RemainingHealth <= 0)
+	{
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Player Died"));
+	}
 }
 
 
