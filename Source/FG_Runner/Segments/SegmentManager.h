@@ -18,9 +18,15 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ToolTip = "The speed of the segments in meters per second."))
 	float SegmentSpeed = 1.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float SegmentMaxSpeed = 5.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SegmentLength = 1000.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float SegmentAcceleration = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AGroundSegment> SegmentBlueprint;

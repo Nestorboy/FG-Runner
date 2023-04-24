@@ -42,6 +42,7 @@ void ASegmentManager::UpdateSegments(float DeltaTime)
 
 void ASegmentManager::MoveSegments(float DeltaTime)
 {
+	SegmentSpeed = SegmentSpeed >= SegmentMaxSpeed ? SegmentMaxSpeed : SegmentSpeed + SegmentAcceleration * DeltaTime;
 	for (int i = 0; i < SegmentBufferSize; i++)
 	{
 		const int BufferIndex = (SegmentCurrentIndex + i) % GroundSegments.Max();
@@ -56,7 +57,7 @@ void ASegmentManager::AddSegments()
 	FVector LastExit = LastSegment->GetExitPosition();
 	while (SegmentBufferSize < GroundSegments.Max() && LastExit.X < PrewarmDistance)
 	{
-		const auto NewSegment = GetWorld()->SpawnActor<AGroundSegment>(SegmentBlueprint);
+		const auto NewSegment = GetWorld()->SpawnActor<AGroundSegment>(SegmentBlueprint, FVector(10000.0f, 0.0f, 0.0f), FRotator::ZeroRotator);
 		NewSegment->SetEntryPosition(LastExit);
 		LastIndex = (LastIndex + 1) % GroundSegments.Max();
 		GroundSegments[LastIndex] = NewSegment;
