@@ -4,7 +4,6 @@
 
 #include "EngineUtils.h"
 #include "FG_Runner/RunnerCharacter.h"
-#include "FG_Runner/Segments/SegmentManager.h"
 
 AObstacleBase::AObstacleBase()
 {
