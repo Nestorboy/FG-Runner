@@ -29,8 +29,7 @@ void AGroundSegment::Move(float Distance)
 
 void AGroundSegment::SetEntryPosition(FVector WorldPosition)
 {
-	const FVector CenterLocation = GetActorLocation();
-	RootComponent->SetWorldLocation(WorldPosition + CenterLocation - EntryPoint);
+	RootComponent->SetWorldLocation(WorldPosition - EntryPoint);
 }
 
 FVector AGroundSegment::GetExitPosition()
