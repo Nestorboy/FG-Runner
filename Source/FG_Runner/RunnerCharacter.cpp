@@ -10,8 +10,9 @@
 ARunnerCharacter::ARunnerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
+	RemainingHealth = MaxHealth;
 	LaneIndex = static_cast<float>(LaneCount) * 0.5f - 0.5f;
+	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 }
 
 void ARunnerCharacter::BeginPlay()

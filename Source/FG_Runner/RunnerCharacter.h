@@ -31,22 +31,28 @@ class FG_RUNNER_API ARunnerCharacter : public ACharacter
 	TObjectPtr<UInputAction> AttackAction;
 
 protected:
-	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess))
+	int MaxHealth = 3;
+	
+	UPROPERTY(EditAnywhere, Category = Debug, meta = (AllowPrivateAccess), Transient)
+	int RemainingHealth;
+	
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	int LaneCount = 3;
 	
-	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	int LaneIndex;
 	
-	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	int OldLaneIndex = 0;
 	
-	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	bool bIsMoving = false;
 	
-	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly)
 	float MoveDuration = 0.1f;
 	
-	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	float MoveTime = 0.0f;
 	
 public:
