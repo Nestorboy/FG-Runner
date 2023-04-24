@@ -1,30 +1,34 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "RunnerCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
 
-// Sets default values
 ARunnerCharacter::ARunnerCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
+	LaneIndex = static_cast<float>(LaneCount) * 0.5f - 0.5f;
 }
 
-// Called when the game starts or when spawned
 void ARunnerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("BeginPlay()"));
-	}
-
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("BeginPlay()"));
+	
+	const auto Movement = GetCharacterMovement();
+	Movement->bConstrainToPlane = true;
+	Movement->SetPlaneConstraintAxisSetting(EPlaneConstraintAxisSetting::X);
+	
 	PlayerCamera->AddWorldTransform(GetActorTransform());
+
+	float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
+	const FVector OldLocation = GetActorLocation();
+	const FVector NewLocation = FVector(OldLocation.X, (static_cast<float>(LaneIndex) - CenterLaneOffset) * 100.0f, OldLocation.Z);
+	SetActorLocation(NewLocation);
 	
 	auto PlayerController = Cast<APlayerController>(Controller);
 
@@ -40,14 +44,23 @@ void ARunnerCharacter::BeginPlay()
 	}
 }
 
-// Called every frame
 void ARunnerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bIsMoving)
+	{
+		if (MoveTime > 0.0f)
+		{
+			OnMove(DeltaTime);
+		}
+		else
+		{
+			OnEndMove();
+		}
+	}
 }
 
-// Called to bind functionality to input
 void ARunnerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -57,7 +70,6 @@ void ARunnerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void ARunnerCharacter::BindInputs(UInputComponent* PlayerInputComponent)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("BindInputs()"));
 	if (UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		Input->BindAction(JumpAction, ETriggerEvent::Started, this, &ARunnerCharacter::InputJump);
@@ -68,31 +80,72 @@ void ARunnerCharacter::BindInputs(UInputComponent* PlayerInputComponent)
 
 void ARunnerCharacter::InputJump(const FInputActionInstance& Instance)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(321, 5.0f, FColor::Magenta, TEXT("InputJump()"));
-	}
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(321, 5.0f, FColor::Magenta, TEXT("InputJump()"));
 
 	Super::Jump();
 }
 
 void ARunnerCharacter::InputMove(const FInputActionInstance& Instance)
 {
-	if (GEngine)
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(4321, 5.0f, FColor::Magenta, TEXT("InputMove()"));
+
+	if (bIsMoving)
 	{
-		GEngine->AddOnScreenDebugMessage(4321, 5.0f, FColor::Magenta, TEXT("InputMove()"));
+		return;
 	}
 
 	bool bMovingLeft = Instance.GetValue().Get<float>() < 0.0f;
+	if (bMovingLeft)
+	{
+		if (LaneIndex <= 0)
+			return;
+	}
+	else
+	{
+		if (LaneIndex >= LaneCount - 1)
+			return;
+	}
+	
+	OldLaneIndex = LaneIndex;
 	LaneIndex += bMovingLeft ? -1 : 1;
+	OnStartMove();
 }
 
 void ARunnerCharacter::InputAttack(const FInputActionInstance& Instance)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(54321, 5.0f, FColor::Magenta, TEXT("InputAttack()"));
-	}
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(54321, 5.0f, FColor::Magenta, TEXT("InputAttack()"));
+}
+
+void ARunnerCharacter::OnStartMove()
+{
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("OnStartMove()"));
+	
+	bIsMoving = true;
+	MoveTime = MoveDuration;
+}
+
+void ARunnerCharacter::OnMove(float DeltaTime)
+{
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("OnMove()"));
+
+	float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
+	const FVector OldLocation = GetActorLocation();
+	const FVector NewLocation = FVector(OldLocation.X, (FMath::Lerp(static_cast<float>(OldLaneIndex), static_cast<float>(LaneIndex), 1.0f - MoveTime / MoveDuration) - CenterLaneOffset) * 100.0f, OldLocation.Z);
+	SetActorLocation(NewLocation);
+	
+	MoveTime -= DeltaTime;
+}
+
+void ARunnerCharacter::OnEndMove()
+{
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("OnEndMove()"));
+
+	float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
+	const FVector OldLocation = GetActorLocation();
+	const FVector NewLocation = FVector(OldLocation.X, (static_cast<float>(LaneIndex) - CenterLaneOffset) * 100.0f, OldLocation.Z);
+	SetActorLocation(NewLocation);
+	
+	bIsMoving = false;
 }
 
 

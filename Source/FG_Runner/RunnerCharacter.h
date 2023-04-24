@@ -31,8 +31,23 @@ class FG_RUNNER_API ARunnerCharacter : public ACharacter
 	TObjectPtr<UInputAction> AttackAction;
 
 protected:
-	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
+	int LaneCount = 3;
+	
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
 	int LaneIndex;
+	
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
+	int OldLaneIndex = 0;
+	
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
+	bool bIsMoving = false;
+	
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite)
+	float MoveDuration = 0.1f;
+	
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
+	float MoveTime = 0.0f;
 	
 public:
 	// Sets default values for this character's properties
@@ -54,4 +69,8 @@ public:
 	virtual void InputJump(const FInputActionInstance& Instance);
 	virtual void InputMove(const FInputActionInstance& Instance);
 	virtual void InputAttack(const FInputActionInstance& Instance);
+
+	virtual void OnStartMove();
+	virtual void OnMove(float DeltaTime);
+	virtual void OnEndMove();
 };
