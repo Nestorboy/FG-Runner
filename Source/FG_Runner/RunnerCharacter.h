@@ -15,33 +15,37 @@ class FG_RUNNER_API ARunnerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess))
+	UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> PlayerCamera;
 	
-	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess))
+	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TSoftObjectPtr<UInputMappingContext> InputMapping;
 
-	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess))
+	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> JumpAction;
 
-	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess))
+	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> MoveAction;
 
-	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess))
+	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> DropAction;
+	
+	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> AttackAction;
 
+public:
+	UPROPERTY(EditAnywhere)
+	float LaneSpacing = 150.0f;
+
+	UPROPERTY(EditAnywhere)
+	int LaneCount = 3;
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	int MaxHealth = 3;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	float LaneSpacing = 150.0f;
-	
 	UPROPERTY(EditAnywhere, Category = Debug, meta = (AllowPrivateAccess), Transient)
 	int RemainingHealth;
-	
-	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
-	int LaneCount = 3;
 	
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	int LaneIndex;
@@ -51,6 +55,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	bool bIsMoving = false;
+
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
+	bool bHasDropped = false;
 	
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly)
 	float MoveDuration = 0.1f;
@@ -73,13 +80,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	virtual void BindInputs(UInputComponent* PlayerInputComponent);
+	
 	virtual void InputJump(const FInputActionInstance& Instance);
 	virtual void InputMove(const FInputActionInstance& Instance);
+	virtual void InputDrop(const FInputActionInstance& Instance);
 	virtual void InputAttack(const FInputActionInstance& Instance);
 
 	virtual void OnStartMove();
 	virtual void OnMove(float DeltaTime);
 	virtual void OnEndMove();
 
+	virtual void Landed(const FHitResult& Hit) override;
+	
 	virtual void Damage(int Value);
 };

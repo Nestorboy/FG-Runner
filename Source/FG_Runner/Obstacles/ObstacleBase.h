@@ -12,11 +12,14 @@ class FG_RUNNER_API AObstacleBase : public AActor
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess))
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	int Damage = 1;
+	
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	float Probability = 0.65f;
 
 protected:
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess))
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UStaticMeshComponent> Mesh;
 	
 public:	

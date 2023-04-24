@@ -4,6 +4,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 
@@ -75,20 +76,21 @@ void ARunnerCharacter::BindInputs(UInputComponent* PlayerInputComponent)
 	{
 		Input->BindAction(JumpAction, ETriggerEvent::Started, this, &ARunnerCharacter::InputJump);
 		Input->BindAction(MoveAction, ETriggerEvent::Started, this, &ARunnerCharacter::InputMove);
+		Input->BindAction(DropAction, ETriggerEvent::Started, this, &ARunnerCharacter::InputDrop);
 		Input->BindAction(AttackAction, ETriggerEvent::Started, this, &ARunnerCharacter::InputAttack);
 	}
 }
 
 void ARunnerCharacter::InputJump(const FInputActionInstance& Instance)
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(321, 5.0f, FColor::Magenta, TEXT("InputJump()"));
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(321, 5.0f, FColor::Magenta, __FUNCTION__);
 
 	Super::Jump();
 }
 
 void ARunnerCharacter::InputMove(const FInputActionInstance& Instance)
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(4321, 5.0f, FColor::Magenta, TEXT("InputMove()"));
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(4321, 5.0f, FColor::Magenta, __FUNCTION__);
 
 	if (bIsMoving)
 	{
@@ -112,14 +114,33 @@ void ARunnerCharacter::InputMove(const FInputActionInstance& Instance)
 	OnStartMove();
 }
 
+void ARunnerCharacter::InputDrop(const FInputActionInstance& Instance)
+{
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(654321, 5.0f, FColor::Magenta, __FUNCTION__);
+
+	const auto Movement = GetMovementComponent();
+	if (!bHasDropped && Movement->Velocity.Z > -1000.0f && Movement->IsFalling())
+	{
+		bHasDropped = true;
+		const FVector DownwardForce {0.0f, 0.0f, -1000.0f};
+		Movement->Velocity = DownwardForce;
+	}
+}
+
+void ARunnerCharacter::Landed(const FHitResult& Hit)
+{
+	bHasDropped = false;
+}
+
+
 void ARunnerCharacter::InputAttack(const FInputActionInstance& Instance)
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(54321, 5.0f, FColor::Magenta, TEXT("InputAttack()"));
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(54321, 5.0f, FColor::Magenta, __FUNCTION__);
 }
 
 void ARunnerCharacter::OnStartMove()
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("OnStartMove()"));
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, __FUNCTION__);
 	
 	bIsMoving = true;
 	MoveTime = MoveDuration;
@@ -131,7 +152,8 @@ void ARunnerCharacter::OnMove(float DeltaTime)
 
 	float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
 	const FVector OldLocation = GetActorLocation();
-	const FVector NewLocation = FVector(OldLocation.X, (FMath::Lerp(static_cast<float>(OldLaneIndex), static_cast<float>(LaneIndex), 1.0f - MoveTime / MoveDuration) - CenterLaneOffset) * LaneSpacing, OldLocation.Z);
+	const float Alpha = FMath::SmoothStep(0.0f, 1.0f, 1.0f - MoveTime / MoveDuration);
+	const FVector NewLocation = FVector(OldLocation.X, (FMath::Lerp(static_cast<float>(OldLaneIndex), static_cast<float>(LaneIndex), Alpha) - CenterLaneOffset) * LaneSpacing, OldLocation.Z);
 	SetActorLocation(NewLocation);
 	
 	MoveTime -= DeltaTime;

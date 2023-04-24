@@ -29,10 +29,13 @@ protected:
 	float SegmentAcceleration = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AGroundSegment> SegmentBlueprint;
+	TSubclassOf<AGroundSegment> InitialSegment;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<TSubclassOf<AGroundSegment>> SegmentBlueprints;
 
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
-	TArray<TObjectPtr<AGroundSegment>> GroundSegments; // Does using a TArray help avoid memory fragmentation? :x
+	TArray<TObjectPtr<AGroundSegment>> GroundSegments;
 	
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadWrite, Transient)
 	int SegmentCurrentIndex;

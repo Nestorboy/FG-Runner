@@ -22,7 +22,25 @@ void ASegmentManager::BeginPlay()
 	const int MaxSegments = FMath::CeilToInt(FMath::Max(2.0f, (DistanceAhead + DistanceBehind) / SegmentLength));
 	GroundSegments.Init(nullptr, MaxSegments);
 
-	const auto NewSegment = GetWorld()->SpawnActor<AGroundSegment>(SegmentBlueprint);
+	TSubclassOf<AGroundSegment> InitSegment;
+	if (InitialSegment)
+	{
+		InitSegment = InitialSegment;
+	}
+	else
+	{
+		int RandomIndex = FMath::Rand() % SegmentBlueprints.Max();
+		InitSegment = SegmentBlueprints[RandomIndex];
+		if (!InitSegment)
+		{
+			UE_LOG(LogTemp, Error, TEXT("No valid initial Segment found."));
+			return;
+		}
+		
+		UE_LOG(LogTemp, Warning, TEXT("InitialSegment is missing."));
+	}
+	
+	const auto NewSegment = GetWorld()->SpawnActor<AGroundSegment>(InitSegment);
 	GroundSegments[0] = NewSegment;
 	SegmentBufferSize++;
 }
@@ -57,7 +75,8 @@ void ASegmentManager::AddSegments()
 	FVector LastExit = LastSegment->GetExitPosition();
 	while (SegmentBufferSize < GroundSegments.Max() && LastExit.X < PrewarmDistance)
 	{
-		const auto NewSegment = GetWorld()->SpawnActor<AGroundSegment>(SegmentBlueprint, FVector(10000.0f, 0.0f, 0.0f), FRotator::ZeroRotator);
+		const int RandomIndex = FMath::Rand() % SegmentBlueprints.Max();
+		const auto NewSegment = GetWorld()->SpawnActor<AGroundSegment>(SegmentBlueprints[RandomIndex], FVector(10000.0f, 0.0f, 0.0f), FRotator::ZeroRotator);
 		NewSegment->SetEntryPosition(LastExit);
 		LastIndex = (LastIndex + 1) % GroundSegments.Max();
 		GroundSegments[LastIndex] = NewSegment;
