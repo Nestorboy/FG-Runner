@@ -6,6 +6,8 @@
 - [x] Infinitely repeating ground segments.
 - [x] Stationary obstacles with variation.
 - [x] Increasing speed over time.
+- [ ] 2 player co-op mode.
+- [ ] Reward player for dodging.
 - [ ] Point system.
 - [ ] Killable enemies.
 - [ ] Menus.
