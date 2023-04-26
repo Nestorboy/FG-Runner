@@ -1,11 +1,11 @@
 # FG-Runner
 
 ## Features
-- [x] Simple inputs.<br>
-- [x] Health points.<br>
-- [x] Infinitely repeating ground segments.<br>
-- [x] Stationary obstacles with variation.<br>
-- [x] Increasing speed over time.<br>
+- [x] Simple inputs.
+- [x] Health points.
+- [x] Infinitely repeating ground segments.
+- [x] Stationary obstacles with variation.
+- [x] Increasing speed over time.
 - [ ] Point system.
 - [ ] Killable enemies.
 - [ ] Menus.
