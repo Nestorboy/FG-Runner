@@ -1,11 +1,15 @@
 # FG-Runner
 
 ## Features
-- Simple inputs.
-- Health points.
-- Infinitely repeating ground segments.
-- Stationary obstacles with variation.
-- Increasing speed over time.
+- [x] Simple inputs.<br>
+- [x] Health points.<br>
+- [x] Infinitely repeating ground segments.<br>
+- [x] Stationary obstacles with variation.<br>
+- [x] Increasing speed over time.<br>
+- [ ] Point system.
+- [ ] Killable enemies.
+- [ ] Menus.
+- [ ] Saved scoreboard.
 
 ## Part 1
 All the code so far has been written using C++ centered around OOP in the context of the Unreal Engine.
