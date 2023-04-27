@@ -30,19 +30,6 @@ void ARunnerCharacter::BeginPlay()
 	const FVector OldLocation = GetActorLocation();
 	const FVector NewLocation = FVector(OldLocation.X, (static_cast<float>(LaneIndex) - CenterLaneOffset) * LaneSpacing, OldLocation.Z);
 	SetActorLocation(NewLocation);
-
-	const auto PlayerController = Cast<APlayerController>(Controller);
-
-	if (const ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer())
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
-		{
-			if (!InputMapping.IsNull())
-			{
-				InputSystem->AddMappingContext(InputMapping.LoadSynchronous(), 0);
-			}
-		}
-	}
 }
 
 void ARunnerCharacter::Tick(float DeltaTime)
@@ -65,6 +52,19 @@ void ARunnerCharacter::Tick(float DeltaTime)
 void ARunnerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	const auto PlayerController = Cast<APlayerController>(Controller);
+
+	if (const ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer())
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		{
+			if (!InputMapping.IsNull())
+			{
+				InputSystem->AddMappingContext(InputMapping.LoadSynchronous(), 0);
+			}
+		}
+	}
 	
 	BindInputs(PlayerInputComponent);
 }
