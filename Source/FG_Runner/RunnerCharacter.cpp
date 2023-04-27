@@ -176,10 +176,15 @@ void ARunnerCharacter::Damage(int Value)
 	RemainingHealth -= Value;
 	if (RemainingHealth <= 0)
 	{
-		// TODO: Death -> Delay -> Lost Menu -> Retry Button -> Restart
-		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Player Died"));
-		UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
+		OnDeath();
 	}
+}
+
+void ARunnerCharacter::OnDeath()
+{
+	// TODO: Death -> Delay -> Lost Menu -> Retry Button -> Restart
+	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Player Died"));
+	UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
 }
 
 

@@ -93,4 +93,7 @@ public:
 	virtual void Landed(const FHitResult& Hit) override;
 	
 	virtual void Damage(int Value);
+
+	UFUNCTION(CallInEditor, Category = Debug)
+	virtual void OnDeath();
 };
