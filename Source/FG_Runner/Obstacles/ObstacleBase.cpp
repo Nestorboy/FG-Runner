@@ -50,9 +50,13 @@ void AObstacleBase::Tick(float DeltaTime)
 void AObstacleBase::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, __FUNCTION__);
-	if (const auto Character = Cast<ARunnerCharacter>(OtherActor))
+	if (!bHasHitPlayer)
 	{
-		Character->Damage(Damage);
+		if (const auto Character = Cast<ARunnerCharacter>(OtherActor))
+		{
+			bHasHitPlayer = true;
+			Character->Damage(Damage);
+		}
 	}
 }
 

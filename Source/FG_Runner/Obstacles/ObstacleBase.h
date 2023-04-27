@@ -21,6 +21,8 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UStaticMeshComponent> Mesh;
+
+	bool bHasHitPlayer;
 	
 public:	
 	AObstacleBase();
