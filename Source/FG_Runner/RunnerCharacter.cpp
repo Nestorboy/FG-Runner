@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 ARunnerCharacter::ARunnerCharacter()
 {
@@ -175,7 +176,9 @@ void ARunnerCharacter::Damage(int Value)
 	RemainingHealth -= Value;
 	if (RemainingHealth <= 0)
 	{
+		// TODO: Death -> Delay -> Lost Menu -> Retry Button -> Restart
 		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Player Died"));
+		UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
 	}
 }
 
