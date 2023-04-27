@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PauseMenu.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "GameHUD.generated.h"
@@ -20,13 +19,14 @@ protected:
 
 	// Distance progress
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UPauseMenu> PauseMenuWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UMG)
+	TSubclassOf<UUserWidget> PauseMenuWidget;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UButton> PauseButton;
 
 	virtual void NativeConstruct() override;
 
+	UFUNCTION()
 	virtual void OnPauseClicked();
 };
