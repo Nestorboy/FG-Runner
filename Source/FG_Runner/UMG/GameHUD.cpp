@@ -17,9 +17,8 @@ void UGameHUD::NativeConstruct()
 
 void UGameHUD::OnPauseClicked()
 {
-	UGameplayStatics::SetGamePaused(GetWorld(), true);
-	
-	if (const auto Widget = CreateWidget(GetWorld(), PauseMenuWidget))
+	//UGameplayStatics::SetGamePaused(GetWorld(), true); // Initial animations only works if I use a 0.0f delay, but that won't work if paused.
+	if (const auto Widget = CreateWidget(GetOwningPlayer(), PauseMenuWidget))
 	{
 		Widget->AddToViewport();
 	}
