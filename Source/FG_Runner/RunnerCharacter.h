@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InputAction.h"
 #include "InputMappingContext.h"
+#include "Components/Button.h"
 #include "GameFramework/Character.h"
 #include "RunnerCharacter.generated.h"
 
@@ -43,9 +44,18 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	int MaxHealth = 3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UMG)
+	TSubclassOf<UUserWidget> GameOverMenuWidget;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	TObjectPtr<UUserWidget> GameOverMenu;
 	
 	UPROPERTY(EditAnywhere, Category = Debug, meta = (AllowPrivateAccess), Transient)
 	int RemainingHealth;
+
+	UPROPERTY(EditAnywhere, Category = Debug, meta = (AllowPrivateAccess), Transient)
+	bool bHasLost;
 	
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	int LaneIndex;
@@ -95,5 +105,5 @@ public:
 	virtual void Damage(int Value);
 
 	UFUNCTION(CallInEditor, Category = Debug)
-	virtual void OnDeath();
+	virtual void OnGameOver();
 };

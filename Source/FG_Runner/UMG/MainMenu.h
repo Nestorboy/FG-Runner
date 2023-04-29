@@ -5,34 +5,35 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
-#include "PauseMenu.generated.h"
+#include "MainMenu.generated.h"
 
 UCLASS()
-class FG_RUNNER_API UPauseMenu : public UUserWidget
+class FG_RUNNER_API UMainMenu : public UUserWidget
 {
 	GENERATED_BODY()
 
 protected:
+
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UButton> ContinueButton;
+	TObjectPtr<UButton> StartButton;
 	
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UButton> RetryButton;
+	TObjectPtr<UButton> ScoreButton;
 	
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UButton> SettingsButton;
 	
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UButton> MainMenuButton;
-
+	TObjectPtr<UButton> QuitButton;
+	
 	virtual void NativeConstruct() override;
-
+	
 	UFUNCTION()
-	virtual void OnContinueClicked();
+	virtual void OnStartClicked();
+	UFUNCTION()
+	virtual void OnScoreClicked();
 	UFUNCTION()
 	virtual void OnSettingsClicked();
 	UFUNCTION()
-	virtual void OnRetryClicked();
-	UFUNCTION()
-	virtual void OnMainMenuClicked();
+	virtual void OnQuitClicked();
 };

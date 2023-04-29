@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 ARunnerCharacter::ARunnerCharacter()
@@ -173,18 +174,33 @@ void ARunnerCharacter::OnEndMove()
 
 void ARunnerCharacter::Damage(int Value)
 {
+	if (bHasLost)
+	{
+		return;
+	}
+	
 	RemainingHealth -= Value;
 	if (RemainingHealth <= 0)
 	{
-		OnDeath();
+		bHasLost = true;
+		OnGameOver();
 	}
 }
 
-void ARunnerCharacter::OnDeath()
+void ARunnerCharacter::OnGameOver()
 {
-	// TODO: Death -> Delay -> Lost Menu -> Retry Button -> Restart
-	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Player Died"));
-	UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
+	// TODO: GameOver -> Delay -> Lost Menu -> Retry Button -> Restart
+	if (GameOverMenuWidget)
+	{
+		if (const auto Widget = CreateWidget(GetWorld(), GameOverMenuWidget))
+		{
+			Widget->AddToViewport();
+		}
+	}
+	else
+	{
+		UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
+	}
 }
 
 

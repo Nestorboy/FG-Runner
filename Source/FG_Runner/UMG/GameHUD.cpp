@@ -7,6 +7,8 @@
 
 void UGameHUD::NativeConstruct()
 {
+	Super::NativeConstruct();
+	
 	if (PauseButton)
 	{
 		PauseButton->OnClicked.AddDynamic(this, &UGameHUD::OnPauseClicked);

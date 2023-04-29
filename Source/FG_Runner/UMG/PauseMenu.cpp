@@ -7,11 +7,13 @@
 
 void UPauseMenu::NativeConstruct()
 {
-	#define BindButton(button, function) if (button) button->OnClicked.AddDynamic(this, function)
-	BindButton(ContinueButton, &UPauseMenu::OnContinueClicked);
-	BindButton(SettingsButton, &UPauseMenu::OnSettingsClicked);
-	BindButton(RetryButton, &UPauseMenu::OnRetryClicked);
-	BindButton(MainMenuButton, &UPauseMenu::OnMainMenuClicked);
+	Super::NativeConstruct();
+	
+	#define BIND_BUTTON(button, function) if (button) button->OnClicked.AddDynamic(this, function)
+	BIND_BUTTON(ContinueButton, &UPauseMenu::OnContinueClicked);
+	BIND_BUTTON(SettingsButton, &UPauseMenu::OnSettingsClicked);
+	BIND_BUTTON(RetryButton, &UPauseMenu::OnRetryClicked);
+	BIND_BUTTON(MainMenuButton, &UPauseMenu::OnMainMenuClicked);
 }
 
 void UPauseMenu::OnContinueClicked()
@@ -28,10 +30,16 @@ void UPauseMenu::OnSettingsClicked()
 
 void UPauseMenu::OnRetryClicked()
 {
-	UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
+	if (const auto World = GetWorld())
+	{
+		UKismetSystemLibrary::ExecuteConsoleCommand(World, TEXT("RestartLevel"));
+	}
 }
 
 void UPauseMenu::OnMainMenuClicked()
 {
-	
+	if (const auto World = GetWorld())
+	{
+		UGameplayStatics::OpenLevel(World, TEXT("L_MainMenu"));
+	}
 }
