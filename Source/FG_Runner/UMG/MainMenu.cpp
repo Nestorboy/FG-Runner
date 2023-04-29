@@ -2,6 +2,7 @@
 
 #include "MainMenu.h"
 
+#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 void UMainMenu::NativeConstruct()
@@ -13,6 +14,9 @@ void UMainMenu::NativeConstruct()
 	BIND_BUTTON(ScoreButton, &UMainMenu::OnScoreClicked);
 	BIND_BUTTON(SettingsButton, &UMainMenu::OnSettingsClicked);
 	BIND_BUTTON(QuitButton, &UMainMenu::OnQuitClicked);
+
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
+	UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(UGameplayStatics::GetPlayerController(GetWorld(), 0), this);
 }
 
 void UMainMenu::OnStartClicked()

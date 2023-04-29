@@ -2,6 +2,7 @@
 
 #include "GameOverMenu.h"
 
+#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 void UGameOverMenu::NativeConstruct()
@@ -13,6 +14,8 @@ void UGameOverMenu::NativeConstruct()
 	BIND_BUTTON(RetryButton, &UGameOverMenu::OnRetryClicked);
 	BIND_BUTTON(SettingsButton, &UGameOverMenu::OnSettingsClicked);
 	BIND_BUTTON(MainMenuButton, &UGameOverMenu::OnMainMenuClicked);
+
+	UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(UGameplayStatics::GetPlayerController(GetWorld(), 0), this);
 }
 
 void UGameOverMenu::OnScoreClicked()
