@@ -6,12 +6,17 @@
 - [x] Infinitely repeating ground segments.
 - [x] Stationary obstacles with variation.
 - [x] Increasing speed over time.
-- [ ] 2 player co-op mode.
-- [ ] Reward player for dodging.
+- [x] Pause menu.
+- [x] Main menu.
+- [x] Game over menu.
 - [ ] Point system.
+- [ ] Scoreboard menu.
+- [ ] Settings menu.
+- [ ] 2 player co-op mode.
+- [ ] Reward for dodging.
 - [ ] Killable enemies.
-- [ ] Menus.
 - [ ] Saved scoreboard.
+- [ ] Saved settings.
 
 ## Part 1
 All the code so far has been written using C++ centered around OOP in the context of the Unreal Engine.
