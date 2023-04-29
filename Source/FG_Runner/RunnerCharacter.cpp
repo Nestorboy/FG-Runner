@@ -20,8 +20,7 @@ ARunnerCharacter::ARunnerCharacter()
 void ARunnerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("BeginPlay()"));
-	
+
 	const auto Movement = GetCharacterMovement();
 	Movement->bConstrainToPlane = true;
 	Movement->SetPlaneConstraintAxisSetting(EPlaneConstraintAxisSetting::X);
@@ -84,15 +83,11 @@ void ARunnerCharacter::BindInputs(UInputComponent* PlayerInputComponent)
 
 void ARunnerCharacter::InputJump(const FInputActionInstance& Instance)
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(321, 5.0f, FColor::Magenta, __FUNCTION__);
-
 	Super::Jump();
 }
 
 void ARunnerCharacter::InputMove(const FInputActionInstance& Instance)
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(4321, 5.0f, FColor::Magenta, __FUNCTION__);
-
 	if (bIsMoving)
 	{
 		return;
@@ -117,8 +112,6 @@ void ARunnerCharacter::InputMove(const FInputActionInstance& Instance)
 
 void ARunnerCharacter::InputDrop(const FInputActionInstance& Instance)
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(654321, 5.0f, FColor::Magenta, __FUNCTION__);
-
 	const auto Movement = GetMovementComponent();
 	if (!bHasDropped && Movement->Velocity.Z > -1000.0f && Movement->IsFalling())
 	{
@@ -136,22 +129,18 @@ void ARunnerCharacter::Landed(const FHitResult& Hit)
 
 void ARunnerCharacter::InputAttack(const FInputActionInstance& Instance)
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(54321, 5.0f, FColor::Magenta, __FUNCTION__);
+	
 }
 
 void ARunnerCharacter::OnStartMove()
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, __FUNCTION__);
-	
 	bIsMoving = true;
 	MoveTime = MoveDuration;
 }
 
 void ARunnerCharacter::OnMove(float DeltaTime)
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("OnMove()"));
-
-	float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
+	const float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
 	const FVector OldLocation = GetActorLocation();
 	const float Alpha = FMath::SmoothStep(0.0f, 1.0f, 1.0f - MoveTime / MoveDuration);
 	const FVector NewLocation = FVector(OldLocation.X, (FMath::Lerp(static_cast<float>(OldLaneIndex), static_cast<float>(LaneIndex), Alpha) - CenterLaneOffset) * LaneSpacing, OldLocation.Z);
@@ -162,8 +151,6 @@ void ARunnerCharacter::OnMove(float DeltaTime)
 
 void ARunnerCharacter::OnEndMove()
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("OnEndMove()"));
-
 	const float CenterLaneOffset = static_cast<float>(LaneCount) * 0.5f - 0.5f;
 	const FVector OldLocation = GetActorLocation();
 	const FVector NewLocation = FVector(OldLocation.X, (static_cast<float>(LaneIndex) - CenterLaneOffset) * LaneSpacing, OldLocation.Z);
