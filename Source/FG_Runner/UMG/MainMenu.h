@@ -25,6 +25,9 @@ protected:
 	
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UButton> QuitButton;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UWorld> GameLevel;
 	
 	virtual void NativeConstruct() override;
 	

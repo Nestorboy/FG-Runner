@@ -25,6 +25,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UButton> MainMenuButton;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UWorld> MainMenuLevel;
+	
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()

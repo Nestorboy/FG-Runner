@@ -23,7 +23,7 @@ void UMainMenu::OnStartClicked()
 {
 	if (const auto World = GetWorld())
 	{
-		UGameplayStatics::OpenLevel(World, TEXT("L_MainLevel"));
+		UGameplayStatics::OpenLevelBySoftObjectPtr(World, GameLevel);
 	}
 }
 

@@ -40,6 +40,6 @@ void UGameOverMenu::OnMainMenuClicked()
 {
 	if (const auto World = GetWorld())
 	{
-		UGameplayStatics::OpenLevel(World, TEXT("L_MainMenu"));
+		UGameplayStatics::OpenLevelBySoftObjectPtr(World, MainMenuLevel);
 	}
 }
