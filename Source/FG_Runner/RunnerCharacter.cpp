@@ -3,8 +3,10 @@
 #include "RunnerCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "RunnerGameState.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/GameModeBase.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -176,6 +178,8 @@ void ARunnerCharacter::Damage(int Value)
 
 void ARunnerCharacter::OnGameOver()
 {
+	const auto GameState = Cast<ARunnerGameState>(GetWorld()->GetAuthGameMode()->GameState);
+	GameState->WriteSaveGame();
 	// TODO: GameOver -> Delay -> Lost Menu -> Retry Button -> Restart
 	if (GameOverMenuWidget)
 	{
