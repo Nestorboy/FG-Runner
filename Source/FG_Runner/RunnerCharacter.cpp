@@ -39,6 +39,8 @@ void ARunnerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	TryMove();
+	
 	if (bIsMoving)
 	{
 		if (MoveTime > 0.0f)
@@ -90,26 +92,8 @@ void ARunnerCharacter::InputJump(const FInputActionInstance& Instance)
 
 void ARunnerCharacter::InputMove(const FInputActionInstance& Instance)
 {
-	if (bIsMoving)
-	{
-		return;
-	}
-
-	const bool bMovingLeft = Instance.GetValue().Get<float>() < 0.0f;
-	if (bMovingLeft)
-	{
-		if (LaneIndex <= 0)
-			return;
-	}
-	else
-	{
-		if (LaneIndex >= LaneCount - 1)
-			return;
-	}
-	
-	OldLaneIndex = LaneIndex;
-	LaneIndex += bMovingLeft ? -1 : 1;
-	OnStartMove();
+	MoveValue = Instance.GetValue().Get<float>();
+	bMoveConsumed = false;
 }
 
 void ARunnerCharacter::InputDrop(const FInputActionInstance& Instance)
@@ -132,6 +116,31 @@ void ARunnerCharacter::Landed(const FHitResult& Hit)
 void ARunnerCharacter::InputAttack(const FInputActionInstance& Instance)
 {
 	
+}
+
+void ARunnerCharacter::TryMove()
+{
+	if (bIsMoving || bMoveConsumed)
+	{
+		return;
+	}
+	bMoveConsumed = true;
+	
+	const bool bMovingLeft = MoveValue < 0.0f;
+	if (bMovingLeft)
+	{
+		if (LaneIndex <= 0)
+			return;
+	}
+	else
+	{
+		if (LaneIndex >= LaneCount - 1)
+			return;
+	}
+	
+	OldLaneIndex = LaneIndex;
+	LaneIndex += bMovingLeft ? -1 : 1;
+	OnStartMove();
 }
 
 void ARunnerCharacter::OnStartMove()

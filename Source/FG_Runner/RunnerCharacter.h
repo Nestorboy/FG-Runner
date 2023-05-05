@@ -37,9 +37,12 @@ class FG_RUNNER_API ARunnerCharacter : public ACharacter
 public:
 	UPROPERTY(EditAnywhere)
 	float LaneSpacing = 150.0f;
-
+	
 	UPROPERTY(EditAnywhere)
 	int LaneCount = 3;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float MoveDuration = 0.1f;
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
@@ -64,13 +67,16 @@ protected:
 	int OldLaneIndex = 0;
 	
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
+	float MoveValue = 0.0f;
+	
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
+	bool bMoveConsumed = true;
+	
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	bool bIsMoving = false;
 
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	bool bHasDropped = false;
-	
-	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly)
-	float MoveDuration = 0.1f;
 	
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	float MoveTime = 0.0f;
@@ -96,6 +102,7 @@ public:
 	virtual void InputDrop(const FInputActionInstance& Instance);
 	virtual void InputAttack(const FInputActionInstance& Instance);
 
+	virtual void TryMove();
 	virtual void OnStartMove();
 	virtual void OnMove(float DeltaTime);
 	virtual void OnEndMove();
