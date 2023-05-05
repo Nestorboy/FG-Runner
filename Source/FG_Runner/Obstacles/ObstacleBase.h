@@ -23,8 +23,14 @@ protected:
 	TObjectPtr<UStaticMeshComponent> Mesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float MaxAngleOffset = 5.0f;
+	bool bRandomLane = false;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool bRandomAngle = true;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float MaxAngleOffset = 5.0f;
+	
 	bool bHasHitPlayer;
 	
 public:	
