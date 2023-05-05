@@ -9,14 +9,14 @@
 - [x] Pause menu.
 - [x] Main menu.
 - [x] Game over menu.
-- [ ] Point system.
-- [ ] Scoreboard menu.
-- [ ] Settings menu.
+- [x] Point system.
+- [x] Scoreboard.
+- [x] Saved scoreboard.
 - [ ] 2 player co-op mode.
 - [ ] Reward for dodging.
-- [ ] Killable enemies.
-- [ ] Saved scoreboard.
-- [ ] Saved settings.
+- [ ] ~Killable enemies.~
+- [ ] ~Settings menu.~
+- [ ] ~Saved settings.~
 
 ## Part 1
 All the code so far has been written using C++ centered around OOP in the context of the Unreal Engine.
