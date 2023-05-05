@@ -48,6 +48,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	int MaxHealth = 3;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float GraceDuration = 2.0f;
+
+
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UMG)
 	TSubclassOf<UUserWidget> GameOverMenuWidget;
 
@@ -77,9 +82,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	bool bHasDropped = false;
+
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
+	bool bIsGracePeriod = false;
 	
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	float MoveTime = 0.0f;
+
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
+	float GraceTime = 0.0f;
 	
 public:
 	// Sets default values for this character's properties

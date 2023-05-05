@@ -52,6 +52,16 @@ void ARunnerCharacter::Tick(float DeltaTime)
 			OnEndMove();
 		}
 	}
+
+	if (bIsGracePeriod)
+	{
+		GraceTime += DeltaTime;
+		if (GraceTime >= GraceDuration)
+		{
+			bIsGracePeriod = false;
+			GraceTime = GraceDuration;
+		}
+	}
 }
 
 void ARunnerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -172,7 +182,7 @@ void ARunnerCharacter::OnEndMove()
 
 void ARunnerCharacter::Damage(int Value)
 {
-	if (bHasLost)
+	if (bIsGracePeriod || bHasLost)
 	{
 		return;
 	}
@@ -182,6 +192,11 @@ void ARunnerCharacter::Damage(int Value)
 	{
 		bHasLost = true;
 		OnGameOver();
+	}
+	else
+	{
+		bIsGracePeriod = true;
+		GraceTime = 0.0f;
 	}
 }
 
