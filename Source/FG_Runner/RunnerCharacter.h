@@ -121,6 +121,8 @@ public:
 	virtual void Landed(const FHitResult& Hit) override;
 	
 	virtual void Damage(int Value);
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnDamage();
 
 	UFUNCTION(CallInEditor, Category = Debug)
 	virtual void OnGameOver();
