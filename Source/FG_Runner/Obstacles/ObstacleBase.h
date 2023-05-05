@@ -22,6 +22,9 @@ protected:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UStaticMeshComponent> Mesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float MaxAngleOffset = 5.0f;
+
 	bool bHasHitPlayer;
 	
 public:	

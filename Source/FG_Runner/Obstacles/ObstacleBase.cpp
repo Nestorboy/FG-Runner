@@ -38,7 +38,7 @@ void AObstacleBase::BeginPlay()
 	const FVector OldPosition = GetActorLocation();
 	SetActorLocation(FVector(OldPosition.X, (static_cast<float>(LaneIndex) - CenterLaneOffset) * Character->LaneSpacing, OldPosition.Z));
 
-	AddActorWorldRotation(FRotator(0.0f, FMath::FRandRange(-15.0f, 15.0f), 0.0f));
+	AddActorWorldRotation(FRotator(0.0f, FMath::FRandRange(-MaxAngleOffset, MaxAngleOffset), 0.0f));
 }
 
 void AObstacleBase::Tick(float DeltaTime)
