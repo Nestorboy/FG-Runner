@@ -24,7 +24,6 @@ void ARunnerGameState::WriteSaveGame()
 	const auto SaveGame = Cast<URunnerSave>(UGameplayStatics::CreateSaveGameObject(URunnerSave::StaticClass()));
 	SaveGame->HighestScores = HighScores;
 	UGameplayStatics::SaveGameToSlot(SaveGame, SAVE_NAME, SAVE_ID);
-	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Saved \"HighScoreSave\" with id \"0\"."));
 }
 
 void ARunnerGameState::ReadSaveGame()
@@ -39,8 +38,6 @@ void ARunnerGameState::ReadSaveGame()
 	{
 		HighScores = HighScoreSave->HighestScores;
 		HighScores.Sort(); // Sort after read in case of offline manipulation.
-		
-		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Loaded \"HighScoreSave\" with id \"0\"."));
 	}
 }
 
