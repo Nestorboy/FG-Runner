@@ -12,6 +12,10 @@ class FG_RUNNER_API ASegmentManager : public AActor
 {
 	GENERATED_BODY()
 
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Transient)
+	float MovedDistance;
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float PrewarmDistance = 1000.0f;

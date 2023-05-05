@@ -2,6 +2,8 @@
 
 #include "SegmentManager.h"
 
+#include "FG_Runner/RunnerGameState.h"
+
 ASegmentManager::ASegmentManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -29,7 +31,7 @@ void ASegmentManager::BeginPlay()
 	}
 	else
 	{
-		int RandomIndex = FMath::Rand() % SegmentBlueprints.Num();
+		const int RandomIndex = FMath::Rand() % SegmentBlueprints.Num();
 		InitSegment = SegmentBlueprints[RandomIndex];
 		if (!InitSegment)
 		{
@@ -61,10 +63,13 @@ void ASegmentManager::UpdateSegments(float DeltaTime)
 void ASegmentManager::MoveSegments(float DeltaTime)
 {
 	SegmentSpeed = SegmentSpeed >= SegmentMaxSpeed ? SegmentMaxSpeed : SegmentSpeed + SegmentAcceleration * DeltaTime;
+	const float SegmentMoveDistance = SegmentSpeed * DeltaTime * 100.0f;
+	MovedDistance += SegmentMoveDistance;
+	Cast<ARunnerGameState>(GetWorld()->GetGameState())->SetScore(MovedDistance); // Should probably be cached.
 	for (int i = 0; i < SegmentBufferSize; i++)
 	{
 		const int BufferIndex = (SegmentCurrentIndex + i) % GroundSegments.Num();
-		GroundSegments[BufferIndex]->Move(SegmentSpeed * DeltaTime * 100.0f);
+		GroundSegments[BufferIndex]->Move(SegmentMoveDistance);
 	}
 }
 
