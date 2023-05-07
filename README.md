@@ -12,8 +12,8 @@
 - [x] Point system.
 - [x] Scoreboard.
 - [x] Saved scoreboard.
+- [x] Reward for dodging.
 - [ ] 2 player co-op mode.
-- [ ] Reward for dodging.
 - [ ] ~Killable enemies.~
 - [ ] ~Settings menu.~
 - [ ] ~Saved settings.~
