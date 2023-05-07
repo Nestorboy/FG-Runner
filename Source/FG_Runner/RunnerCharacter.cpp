@@ -3,6 +3,7 @@
 #include "RunnerCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "FG_RunnerGameModeBase.h"
 #include "RunnerGameState.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -10,6 +11,7 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Obstacles/ObstacleBase.h"
 
 ARunnerCharacter::ARunnerCharacter()
 {
@@ -17,11 +19,14 @@ ARunnerCharacter::ARunnerCharacter()
 	RemainingHealth = MaxHealth;
 	LaneIndex = static_cast<float>(LaneCount) * 0.5f - 0.5f;
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
+	DodgeCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+	DodgeCollider->SetupAttachment(RootComponent);
 }
 
 void ARunnerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	DodgeCollider->OnComponentEndOverlap.AddDynamic(this, &ARunnerCharacter::EndDodgeOverlap);
 
 	const auto Movement = GetCharacterMovement();
 	Movement->bConstrainToPlane = true;
@@ -178,6 +183,33 @@ void ARunnerCharacter::OnEndMove()
 	SetActorLocation(NewLocation);
 	
 	bIsMoving = false;
+}
+
+void ARunnerCharacter::EndDodgeOverlap(
+	UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex)
+{
+	if (bIsGracePeriod || !OtherActor->IsA(AObstacleBase::StaticClass()))
+	{
+		return;
+	}
+
+	OnCloseCall();
+}
+
+void ARunnerCharacter::OnCloseCall()
+{
+	DodgedObstacles++;
+	if (FMath::FRand() < 0.25f)
+	{
+		if (const auto RunnerGameMode = Cast<AFG_RunnerGameModeBase>(GetWorld()->GetAuthGameMode()))
+		{
+			if (const auto SegmentManager = RunnerGameMode->SegmentManager)
+			{
+				SegmentManager->ObstaclesToRemove++;
+			}
+		}
+	}
 }
 
 void ARunnerCharacter::Damage(int Value)

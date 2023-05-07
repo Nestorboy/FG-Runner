@@ -87,6 +87,12 @@ void ASegmentManager::AddSegments()
 		GroundSegments[LastIndex] = NewSegment;
 		LastSegment = NewSegment;
 		LastExit = NewSegment->GetExitPosition();
+
+		if (ObstaclesToRemove > 0)
+		{
+			ObstaclesToRemove--;
+			NewSegment->DestroyObstacles();
+		}
 		
 		SegmentBufferSize++;
 	}

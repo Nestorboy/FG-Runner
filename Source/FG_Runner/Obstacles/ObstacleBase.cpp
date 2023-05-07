@@ -21,6 +21,8 @@ void AObstacleBase::BeginPlay()
 	//	Mesh->SetVisibility(false, true);
 	//	return;
 	//}
+
+	Mesh->OnComponentBeginOverlap.AddDynamic(this, &AObstacleBase::BeginComponentOverlap);
 	
 	const ARunnerCharacter* Character = nullptr;
 	for (TActorIterator<ARunnerCharacter> ActorItr(GetWorld()); ActorItr; ++ActorItr)
@@ -54,16 +56,24 @@ void AObstacleBase::Tick(float DeltaTime)
 
 }
 
-void AObstacleBase::NotifyActorBeginOverlap(AActor* OtherActor)
+void AObstacleBase::BeginComponentOverlap(
+	UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
 {
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, __FUNCTION__);
-	if (!bHasHitPlayer)
+	if (bHasHitPlayer)
 	{
-		if (const auto Character = Cast<ARunnerCharacter>(OtherActor))
+		return;
+	}
+
+	if (const auto Character = Cast<ARunnerCharacter>(OtherActor))
+	{
+		if (Character->DodgeCollider == OtherComp)
 		{
-			bHasHitPlayer = true;
-			Character->Damage(Damage);
+			return;
 		}
+	
+		bHasHitPlayer = true;
+		Character->Damage(Damage);
 	}
 }
 

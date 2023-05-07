@@ -36,4 +36,6 @@ public:
 	virtual void SetEntryPosition(FVector WorldPosition);
 	
 	virtual FVector GetExitPosition();
+
+	virtual void DestroyObstacles();
 };

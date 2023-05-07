@@ -15,6 +15,9 @@ class FG_RUNNER_API ASegmentManager : public AActor
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Transient)
 	float MovedDistance;
+
+	UPROPERTY(EditAnywhere, Category = Debug, BlueprintReadWrite, Transient)
+	int ObstaclesToRemove;
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

@@ -6,6 +6,7 @@
 #include "InputAction.h"
 #include "InputMappingContext.h"
 #include "Components/Button.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/Character.h"
 #include "RunnerCharacter.generated.h"
 
@@ -16,6 +17,7 @@ class FG_RUNNER_API ARunnerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+protected:
 	UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> PlayerCamera;
 	
@@ -35,6 +37,9 @@ class FG_RUNNER_API ARunnerCharacter : public ACharacter
 	TObjectPtr<UInputAction> AttackAction;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<USphereComponent> DodgeCollider;
+	
 	UPROPERTY(EditAnywhere)
 	float LaneSpacing = 150.0f;
 	
@@ -50,8 +55,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float GraceDuration = 2.0f;
-
-
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UMG)
 	TSubclassOf<UUserWidget> GameOverMenuWidget;
@@ -91,6 +94,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
 	float GraceTime = 0.0f;
+
+	UPROPERTY(VisibleAnywhere, Category = Debug, BlueprintReadOnly, Transient)
+	int DodgedObstacles;
 	
 public:
 	// Sets default values for this character's properties
@@ -119,6 +125,10 @@ public:
 	virtual void OnEndMove();
 
 	virtual void Landed(const FHitResult& Hit) override;
+
+	UFUNCTION()
+	virtual void EndDodgeOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	virtual void OnCloseCall();
 	
 	virtual void Damage(int Value);
 	UFUNCTION(BlueprintImplementableEvent)

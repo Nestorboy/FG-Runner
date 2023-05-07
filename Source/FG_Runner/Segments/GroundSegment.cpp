@@ -2,6 +2,8 @@
 
 #include "GroundSegment.h"
 
+#include "FG_Runner/Obstacles/ObstacleBase.h"
+
 AGroundSegment::AGroundSegment()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -36,4 +38,17 @@ FVector AGroundSegment::GetExitPosition()
 {
 	const FVector CenterLocation = GetActorLocation();
 	return CenterLocation + ExitPoint;
+}
+
+void AGroundSegment::DestroyObstacles()
+{
+	TArray<AActor*> ChildActors = {};
+	GetAttachedActors(ChildActors);
+	for (const auto Child : ChildActors)
+	{
+		if (Child->IsA(AObstacleBase::StaticClass()))
+		{
+			Child->Destroy();
+		}
+	}
 }
